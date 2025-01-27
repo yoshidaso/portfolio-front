@@ -1,43 +1,22 @@
+import "./styles/globals.css";
 import type { Metadata } from "next";
-import "./globals.css";
-import React from "react";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
-  description: "エンジニアとしてのポートフォリオサイト",
+  title: "Portfolio",
+  description: "my portfolio",
 };
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="ja">
-      <body>
-        <div>
-          <header>
-            <nav>
-              <ul>
-                <li>
-                  <a href="#home">トップ</a>
-                </li>
-                <li>
-                  <a href="#about">このサイトについて</a>
-                </li>
-                <li>
-                  <a href="#portfolio">ポートフォリオ</a>
-                </li>
-                <li>
-                  <a href="#contact">連絡先</a>
-                </li>
-              </ul>
-            </nav>
-          </header>
-          <main>{children}</main>
-          <footer>
-            <p>© 2025 Sota</p>
-          </footer>
-        </div>
-      </body>
+    <html lang="jp">
+      <body className={inter.className}>{children}</body>
     </html>
   );
-};
-
-export default Layout;
+}
