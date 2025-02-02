@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import {
   Card,
@@ -9,15 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
-import { useState, useEffect } from "react";
+import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
+import Image from "next/image";
 
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   const projects = [
     {
       title: "E-Commerce Platform",
@@ -69,47 +64,25 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative">
-        <div
-          className={`transform transition-all duration-1000 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">John Doe</h1>
-          <h2 className="text-2xl md:text-3xl text-muted-foreground mb-6">
-            Full Stack Developer
-          </h2>
-          <p className="text-lg md:text-xl max-w-2xl mb-8">
-            Building exceptional digital experiences with cutting-edge
-            technologies
-          </p>
-          <div className="flex gap-4 justify-center mb-16">
-            <Button size="lg">View Portfolio</Button>
-            <Button size="lg" variant="outline">
-              Contact Me
-            </Button>
-          </div>
-        </div>
-        <div className="absolute bottom-8 animate-bounce">
-          <ArrowDown size={24} />
-        </div>
-      </section>
+      <HeroGeometric badge="John Doe" title1="Full Stack" title2="Developer" />
 
       {/* About Section */}
-      <section className="py-20 bg-muted/50">
+      <section className="py-20 bg-accent/5">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?auto=format&fit=crop&q=80"
                 alt="Profile"
-                className="rounded-lg shadow-xl"
+                width={500}
+                height={300}
+                className="rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
               />
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6">About Me</h2>
+              <h2 className="text-3xl font-bold mb-6 text-primary">About Me</h2>
               <p className="text-lg mb-6">
-                Im a passionate full-stack developer with over 5 years of
+                I&apos;m a passionate full-stack developer with over 5 years of
                 experience in building modern web applications. I specialize in
                 React, Node.js, and cloud technologies.
               </p>
@@ -124,7 +97,7 @@ export default function Home() {
                 ].map((skill) => (
                   <div
                     key={skill}
-                    className="bg-background p-3 rounded-lg text-center shadow-sm"
+                    className="bg-white p-3 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow duration-300 border border-primary/10"
                   >
                     {skill}
                   </div>
@@ -138,36 +111,47 @@ export default function Home() {
       {/* Projects Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">
+          <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Featured Projects
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <Card
                 key={index}
-                className="transform transition-all duration-300 hover:scale-105"
+                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-primary/10"
               >
                 <CardHeader>
-                  <CardTitle>{project.title}</CardTitle>
+                  <CardTitle className="text-primary">
+                    {project.title}
+                  </CardTitle>
                   <CardDescription>{project.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                <CardContent className="space-y-4">
+                  <div className="flex flex-wrap gap-2">
                     {project.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="bg-secondary px-2 py-1 rounded-md text-sm"
+                        className="bg-accent/10 text-accent px-2 py-1 rounded-md text-sm"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-4">
-                    <Button variant="outline" size="sm">
+                  <div className="flex gap-4 flex-wrap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-primary text-primary hover:bg-primary/10"
+                    >
                       <Github className="mr-2 h-4 w-4" />
                       GitHub
                     </Button>
-                    <Button size="sm">Live Demo</Button>
+                    <Button
+                      size="sm"
+                      className="bg-primary hover:bg-primary/90"
+                    >
+                      Live Demo
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -177,24 +161,36 @@ export default function Home() {
       </section>
 
       {/* Blog Section */}
-      <section className="py-20 bg-muted/50">
+      <section className="py-20 bg-accent/5">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Latest Posts</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center text-primary">
+            Latest Posts
+          </h2>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {posts.map((post, index) => (
-              <Card key={index}>
+              <Card
+                key={index}
+                className="hover:shadow-xl transition-shadow duration-300 border-primary/10"
+              >
                 <CardHeader>
                   <div className="text-sm text-muted-foreground mb-2">
                     {post.category} • {post.date}
                   </div>
-                  <CardTitle className="text-xl">{post.title}</CardTitle>
+                  <CardTitle className="text-xl text-primary">
+                    {post.title}
+                  </CardTitle>
                   <CardDescription>{post.excerpt}</CardDescription>
                 </CardHeader>
               </Card>
             ))}
           </div>
           <div className="text-center">
-            <Button variant="outline">View All Posts</Button>
+            <Button
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary/10"
+            >
+              View All Posts
+            </Button>
           </div>
         </div>
       </section>
@@ -202,8 +198,10 @@ export default function Home() {
       {/* Contact Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-2xl">
-          <h2 className="text-3xl font-bold mb-12 text-center">Get in Touch</h2>
-          <Card>
+          <h2 className="text-3xl font-bold mb-12 text-center text-primary">
+            Get in Touch
+          </h2>
+          <Card className="border-primary/10">
             <CardContent className="pt-6">
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
@@ -211,7 +209,7 @@ export default function Home() {
                     <label className="text-sm font-medium">Name</label>
                     <input
                       type="text"
-                      className="w-full px-3 py-2 border rounded-md"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
                       required
                     />
                   </div>
@@ -219,7 +217,7 @@ export default function Home() {
                     <label className="text-sm font-medium">Email</label>
                     <input
                       type="email"
-                      className="w-full px-3 py-2 border rounded-md"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
                       required
                     />
                   </div>
@@ -227,11 +225,13 @@ export default function Home() {
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Message</label>
                   <textarea
-                    className="w-full px-3 py-2 border rounded-md h-32"
+                    className="w-full px-3 py-2 border rounded-md h-32 focus:ring-2 focus:ring-primary/50 focus:border-primary"
                     required
                   ></textarea>
                 </div>
-                <Button className="w-full">Send Message</Button>
+                <Button className="w-full bg-primary hover:bg-primary/90">
+                  Send Message
+                </Button>
               </form>
             </CardContent>
           </Card>
@@ -239,16 +239,25 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-muted/50">
+      <footer className="py-12 bg-accent/5">
         <div className="container mx-auto px-4 text-center">
           <div className="flex justify-center gap-6 mb-8">
-            <a href="#" className="hover:text-primary">
+            <a
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
               <Github size={24} />
             </a>
-            <a href="#" className="hover:text-primary">
+            <a
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
               <Linkedin size={24} />
             </a>
-            <a href="#" className="hover:text-primary">
+            <a
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
               <Mail size={24} />
             </a>
           </div>
