@@ -88,11 +88,11 @@ export default function Home() {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[
-                  "React",
-                  "Next.js",
                   "TypeScript",
                   "Golang",
-                  "Java",
+                  "React",
+                  "Next.js",
+                  "Tailwind",
                   "MySQL",
                 ].map((skill) => (
                   <div
