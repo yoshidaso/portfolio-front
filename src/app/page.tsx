@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <HeroGeometric badge="John Doe" title1="Full Stack" title2="Developer" />
+      <HeroGeometric badge="Sota Yoshida" title1="Full Stack" title2="Developer" />
 
       {/* About Section */}
       <section className="py-20 bg-accent/5">
@@ -88,12 +88,12 @@ export default function Home() {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[
-                  "Next.js",
                   "TypeScript",
+                  "Golang",
                   "React",
-                  "Node.js",
-                  "PostgreSQL",
-                  "AWS",
+                  "Next.js",
+                  "Tailwind",
+                  "MySQL",
                 ].map((skill) => (
                   <div
                     key={skill}
