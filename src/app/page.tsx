@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <HeroGeometric badge="Sota Yoshida" title1="Full Stack" title2="Developer" />
+      <HeroGeometric badge="FluenceCode" title1="Full Stack" title2="Developer" />
 
       {/* About Section */}
       <section className="py-20 bg-accent/5">
