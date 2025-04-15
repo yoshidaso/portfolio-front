@@ -262,7 +262,7 @@ export default function Home() {
             </a>
           </div>
           <p className="text-muted-foreground">
-            © {new Date().getFullYear()} John Doe. All rights reserved.
+            © {new Date().getFullYear()} FluenceCode. All rights reserved.
           </p>
         </div>
       </footer>
