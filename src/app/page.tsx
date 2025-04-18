@@ -11,6 +11,7 @@ import {
 } from "@/app/components/ui/card";
 import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
+import { usePost } from "./hooks/usePost";
 
 export default function Home() {
   const projects = [
@@ -38,33 +39,40 @@ export default function Home() {
     },
   ];
 
-  const posts = [
-    {
-      title: "Building Scalable Systems with Go",
-      date: "2024-03-20",
-      category: "Backend Development",
-      excerpt:
-        "Learn how to build highly scalable systems using Go and modern architecture patterns.",
-    },
-    {
-      title: "React Performance Optimization",
-      date: "2024-03-15",
-      category: "Frontend Development",
-      excerpt:
-        "Deep dive into React performance optimization techniques and best practices.",
-    },
-    {
-      title: "The Future of Web Development",
-      date: "2024-03-10",
-      category: "Web Development",
-      excerpt: "Exploring upcoming trends and technologies in web development.",
-    },
-  ];
+  // const posts = [
+  //   {
+  //     title: "Building Scalable Systems with Go",
+  //     date: "2024-03-20",
+  //     category: "Backend Development",
+  //     excerpt:
+  //       "Learn how to build highly scalable systems using Go and modern architecture patterns.",
+  //   },
+  //   {
+  //     title: "React Performance Optimization",
+  //     date: "2024-03-15",
+  //     category: "Frontend Development",
+  //     excerpt:
+  //       "Deep dive into React performance optimization techniques and best practices.",
+  //   },
+  //   {
+  //     title: "The Future of Web Development",
+  //     date: "2024-03-10",
+  //     category: "Web Development",
+  //     excerpt: "Exploring upcoming trends and technologies in web development.",
+  //   },
+  // ];
+
+  const { data } = usePost();
+  console.log(data);
 
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <HeroGeometric badge="FluenceCode" title1="Full Stack" title2="Developer" />
+      <HeroGeometric
+        badge="FluenceCode"
+        title1="Full Stack"
+        title2="Developer"
+      />
 
       {/* About Section */}
       <section className="py-20 bg-accent/5">
@@ -166,7 +174,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Latest Posts
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {/* <div className="grid md:grid-cols-3 gap-8 mb-12">
             {posts.map((post, index) => (
               <Card
                 key={index}
@@ -183,7 +191,7 @@ export default function Home() {
                 </CardHeader>
               </Card>
             ))}
-          </div>
+          </div> */}
           <div className="text-center">
             <Button
               variant="outline"
