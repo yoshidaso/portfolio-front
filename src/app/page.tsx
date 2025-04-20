@@ -11,59 +11,59 @@ import {
 } from "@/app/components/ui/card";
 import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
-import { usePost } from "./hooks/usePost";
+import { usePost } from "./hooks/useQiita";
+import { PostData } from "./api/qiita";
+import Link from "next/link";
+const projects = [
+  {
+    title: "E-Commerce Platform",
+    description:
+      "A full-stack e-commerce solution with real-time inventory management",
+    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
+    github: "#",
+    demo: "#",
+  },
+  {
+    title: "AI Content Generator",
+    description: "An AI-powered platform for generating marketing content",
+    tech: ["React", "Python", "OpenAI", "FastAPI"],
+    github: "#",
+    demo: "#",
+  },
+  {
+    title: "Financial Dashboard",
+    description: "Real-time financial data visualization platform",
+    tech: ["Next.js", "D3.js", "TypeScript", "Tailwind"],
+    github: "#",
+    demo: "#",
+  },
+];
+
+// const posts = [
+//   {
+//     title: "Building Scalable Systems with Go",
+//     date: "2024-03-20",
+//     category: "Backend Development",
+//     excerpt:
+//       "Learn how to build highly scalable systems using Go and modern architecture patterns.",
+//   },
+//   {
+//     title: "React Performance Optimization",
+//     date: "2024-03-15",
+//     category: "Frontend Development",
+//     excerpt:
+//       "Deep dive into React performance optimization techniques and best practices.",
+//   },
+//   {
+//     title: "The Future of Web Development",
+//     date: "2024-03-10",
+//     category: "Web Development",
+//     excerpt: "Exploring upcoming trends and technologies in web development.",
+//   },
+// ];
 
 export default function Home() {
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description:
-        "A full-stack e-commerce solution with real-time inventory management",
-      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "AI Content Generator",
-      description: "An AI-powered platform for generating marketing content",
-      tech: ["React", "Python", "OpenAI", "FastAPI"],
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "Financial Dashboard",
-      description: "Real-time financial data visualization platform",
-      tech: ["Next.js", "D3.js", "TypeScript", "Tailwind"],
-      github: "#",
-      demo: "#",
-    },
-  ];
-
-  // const posts = [
-  //   {
-  //     title: "Building Scalable Systems with Go",
-  //     date: "2024-03-20",
-  //     category: "Backend Development",
-  //     excerpt:
-  //       "Learn how to build highly scalable systems using Go and modern architecture patterns.",
-  //   },
-  //   {
-  //     title: "React Performance Optimization",
-  //     date: "2024-03-15",
-  //     category: "Frontend Development",
-  //     excerpt:
-  //       "Deep dive into React performance optimization techniques and best practices.",
-  //   },
-  //   {
-  //     title: "The Future of Web Development",
-  //     date: "2024-03-10",
-  //     category: "Web Development",
-  //     excerpt: "Exploring upcoming trends and technologies in web development.",
-  //   },
-  // ];
-
-  const { data } = usePost();
-  console.log(data);
+  const { postData, isLoading, error } = usePost();
 
   return (
     <main className="min-h-screen">
@@ -174,24 +174,34 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Latest Posts
           </h2>
-          {/* <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {posts.map((post, index) => (
-              <Card
-                key={index}
-                className="hover:shadow-xl transition-shadow duration-300 border-primary/10"
-              >
-                <CardHeader>
-                  <div className="text-sm text-muted-foreground mb-2">
-                    {post.category} • {post.date}
-                  </div>
-                  <CardTitle className="text-xl text-primary">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription>{post.excerpt}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
-          </div> */}
+          {/* <Post postData={postData} /> */}
+          {isLoading ? (
+            <div className="text-center py-8">Loading posts...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">
+              Error loading posts
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {(postData || []).map((post: PostData, index: number) => (
+                <Link href={post.url} key={index} target="_blank">
+                  <Card
+                    key={index}
+                    className="hover:shadow-xl transition-shadow duration-300 border-primary/10"
+                  >
+                    <CardHeader>
+                      <div className="text-sm text-muted-foreground mb-2">
+                        {post.created_at.split("T")[0]}
+                      </div>
+                      <CardTitle className="text-xl text-primary">
+                        {post.title}
+                      </CardTitle>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
           <div className="text-center">
             <Button
               variant="outline"
