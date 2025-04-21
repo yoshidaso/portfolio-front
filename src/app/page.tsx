@@ -11,8 +11,7 @@ import {
 } from "@/app/components/ui/card";
 import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
-import { usePost } from "./hooks/useQiita";
-import { PostData } from "./api/qiita";
+import { getPosts, PostData, useOgp } from "./hooks/useQiita";
 import Link from "next/link";
 const projects = [
   {
@@ -39,31 +38,9 @@ const projects = [
   },
 ];
 
-// const posts = [
-//   {
-//     title: "Building Scalable Systems with Go",
-//     date: "2024-03-20",
-//     category: "Backend Development",
-//     excerpt:
-//       "Learn how to build highly scalable systems using Go and modern architecture patterns.",
-//   },
-//   {
-//     title: "React Performance Optimization",
-//     date: "2024-03-15",
-//     category: "Frontend Development",
-//     excerpt:
-//       "Deep dive into React performance optimization techniques and best practices.",
-//   },
-//   {
-//     title: "The Future of Web Development",
-//     date: "2024-03-10",
-//     category: "Web Development",
-//     excerpt: "Exploring upcoming trends and technologies in web development.",
-//   },
-// ];
-
 export default function Home() {
-  const { postData, isLoading, error } = usePost();
+  const { postData, isLoading, error } = getPosts();
+  const { allOgpData, isLoading: ogpLoading, error: ogpError } = useOgp();
 
   return (
     <main className="min-h-screen">
@@ -174,8 +151,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Latest Posts
           </h2>
-          {/* <Post postData={postData} /> */}
-          {isLoading ? (
+          {isLoading || ogpLoading ? (
             <div className="text-center py-8">Loading posts...</div>
           ) : error ? (
             <div className="text-center py-8 text-red-500">
@@ -187,9 +163,37 @@ export default function Home() {
                 <Link href={post.url} key={index} target="_blank">
                   <Card
                     key={index}
-                    className="hover:shadow-xl transition-shadow duration-300 border-primary/10"
+                    className="hover:shadow-xl transition-shadow duration-300 border-primary/10 h-full flex flex-col"
                   >
-                    <CardHeader>
+                    <div className="w-full h-48 relative overflow-hidden bg-gray-100">
+                      {allOgpData[index]?.image ? (
+                        <Image
+                          src={allOgpData[index].image}
+                          alt={post.title}
+                          width={800}
+                          height={400}
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400">
+                          <svg
+                            className="w-12 h-12"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <CardHeader className="flex-grow">
                       <div className="text-sm text-muted-foreground mb-2">
                         {post.created_at.split("T")[0]}
                       </div>
