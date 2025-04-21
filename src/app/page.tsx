@@ -165,7 +165,7 @@ export default function Home() {
                     key={index}
                     className="hover:shadow-xl transition-shadow duration-300 border-primary/10 h-full flex flex-col"
                   >
-                    <div className="w-full h-48 relative overflow-hidden bg-gray-100">
+                    <div className="w-full h-48 relative overflow-hidden bg-gray-100 rounded-t-lg">
                       {allOgpData[index]?.image ? (
                         <Image
                           src={allOgpData[index].image}
@@ -190,16 +190,16 @@ export default function Home() {
                               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                             />
                           </svg>
+                          <CardTitle className="text-xl text-primary">
+                            {post.title}
+                          </CardTitle>
                         </div>
                       )}
                     </div>
                     <CardHeader className="flex-grow">
-                      <div className="text-sm text-muted-foreground mb-2">
+                      <div className="text-sm text-muted-foreground">
                         {post.created_at.split("T")[0]}
                       </div>
-                      <CardTitle className="text-xl text-primary">
-                        {post.title}
-                      </CardTitle>
                     </CardHeader>
                   </Card>
                 </Link>
@@ -207,12 +207,9 @@ export default function Home() {
             </div>
           )}
           <div className="text-center">
-            <Button
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              View All Posts
-            </Button>
+            <Link href="https://qiita.com/FluenceCode" target="_blank">
+              <Button>View All Posts</Button>
+            </Link>
           </div>
         </div>
       </section>
