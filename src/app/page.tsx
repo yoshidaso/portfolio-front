@@ -1,6 +1,6 @@
 "use client";
-
-import { Github, Linkedin, Mail } from "lucide-react";
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { Linkedin, Mail } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import {
   Card,
@@ -13,27 +13,38 @@ import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
 import { getPosts, PostData, useOgp } from "./hooks/useQiita";
 import Link from "next/link";
-const projects = [
+
+type Github = {
+  front: string;
+  api?: string;
+};
+
+type Project = {
+  title: string;
+  description: string;
+  tech: string[];
+  github: Github;
+  demo: string;
+};
+
+const PROJECTS: Project[] = [
   {
-    title: "E-Commerce Platform",
-    description:
-      "A full-stack e-commerce solution with real-time inventory management",
-    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-    github: "#",
+    title: "shift-app",
+    description: "シフト管理アプリ",
+    tech: ["Next.js", "TypeScript", "Go", "Prisma", "MySQL"],
+    github: {
+      front: "https://github.com/yoshidaso/shift-app-front",
+      api: "https://github.com/yoshidaso/shift-app-api",
+    },
     demo: "#",
   },
   {
-    title: "AI Content Generator",
-    description: "An AI-powered platform for generating marketing content",
-    tech: ["React", "Python", "OpenAI", "FastAPI"],
-    github: "#",
-    demo: "#",
-  },
-  {
-    title: "Financial Dashboard",
-    description: "Real-time financial data visualization platform",
-    tech: ["Next.js", "D3.js", "TypeScript", "Tailwind"],
-    github: "#",
+    title: "Workout App",
+    description: "筋トレ記録アプリ",
+    tech: ["Next.js", "TypeScript", "Go", "Prisma", "MySQL"],
+    github: {
+      front: "https://github.com/yoshidaso/workout-app-front",
+    },
     demo: "#",
   },
 ];
@@ -99,11 +110,11 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Featured Projects
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
+          <div className="flex flex-row justify-center items-center gap-16 mx-auto">
+            {PROJECTS.map((project, index) => (
               <Card
                 key={index}
-                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-primary/10"
+                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <CardHeader>
                   <CardTitle className="text-primary">
@@ -122,21 +133,26 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-4 flex-wrap">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-primary text-primary hover:bg-primary/10"
+                  <div className="flex gap-4">
+                    {Object.entries(project.github).map(([key, value]) => (
+                      <Link
+                        key={key}
+                        href={value}
+                        target="_blank"
+                        className="flex items-center gap-2 border px-4 rounded-md"
+                      >
+                        <FaGithub size={16} />
+                        {key === "front" ? "Front" : "API"}
+                      </Link>
+                    ))}
+                    <Link
+                      href={project.demo}
+                      target="_blank"
+                      className="flex items-center gap-2 border px-4 rounded-md"
                     >
-                      <Github className="mr-2 h-4 w-4" />
-                      GitHub
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-primary hover:bg-primary/90"
-                    >
-                      Live Demo
-                    </Button>
+                      <FaExternalLinkAlt size={16} />
+                      Link
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -158,21 +174,20 @@ export default function Home() {
               Error loading posts
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="flex justify-center items-center gap-16 mx-auto mb-12">
               {(postData || []).map((post: PostData, index: number) => (
                 <Link href={post.url} key={index} target="_blank">
                   <Card
                     key={index}
-                    className="hover:shadow-xl transition-shadow duration-300 border-primary/10 h-full flex flex-col"
+                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   >
                     <div className="w-full h-48 relative overflow-hidden bg-gray-100 rounded-t-lg">
                       {allOgpData[index]?.image ? (
                         <Image
                           src={allOgpData[index].image}
                           alt={post.title}
-                          width={800}
-                          height={400}
-                          className="object-cover"
+                          width={400}
+                          height={200}
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full text-gray-400">
@@ -206,11 +221,13 @@ export default function Home() {
               ))}
             </div>
           )}
-          <div className="text-center">
-            <Link href="https://qiita.com/FluenceCode" target="_blank">
-              <Button>View All Posts</Button>
-            </Link>
-          </div>
+          <Link
+            href="https://qiita.com/FluenceCode"
+            target="_blank"
+            className="flex justify-center items-center border px-2 py-1 rounded-md w-fit mx-auto"
+          >
+            View All Posts
+          </Link>
         </div>
       </section>
 
@@ -265,7 +282,7 @@ export default function Home() {
               href="#"
               className="text-primary hover:text-primary/80 transition-colors"
             >
-              <Github size={24} />
+              <FaGithub size={24} />
             </a>
             <a
               href="#"
