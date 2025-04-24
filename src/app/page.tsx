@@ -76,13 +76,12 @@ export default function Home() {
               />
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6 text-primary">About Me</h2>
-              <p className="text-lg mb-6">
-                I&apos;m a passionate full-stack developer with over 5 years of
-                experience in building modern web applications. I specialize in
-                React, Node.js, and cloud technologies.
+              <h2 className="text-3xl font-bold mb-3 text-primary">About Me</h2>
+              <p>Web系のフリーランスエンジニアとして活動しています。</p>
+              <p>
+                現在は少数精鋭のチームでGoやTypeScript（Next.jsなど）を中心に、フロントエンドからバックエンドまで幅広く担当しています。
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                 {[
                   "TypeScript",
                   "Golang",
