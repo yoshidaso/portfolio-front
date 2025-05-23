@@ -278,7 +278,7 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <div className="flex justify-center gap-6 mb-8">
             <a
-              href="#"
+              href="https://github.com/yoshidaso"
               className="text-primary hover:text-primary/80 transition-colors"
             >
               <FaGithub size={24} />
