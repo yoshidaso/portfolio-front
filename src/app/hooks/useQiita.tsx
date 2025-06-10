@@ -6,12 +6,7 @@ export interface PostData {
   tags: string[];
 }
 
-const fetcher = (url: string) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
-    },
-  }).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 // 複数URLに対するフェッチャー
 const multipleFetcher = (urls: string[]) => {
@@ -24,14 +19,7 @@ export const getPosts = (): {
   error: any;
   isLoading: boolean;
 } => {
-  const {
-    data: postData,
-    error,
-    isLoading,
-  } = useSWR(
-    "https://qiita.com/api/v2/authenticated_user/items?page=1&per_page=3",
-    fetcher
-  );
+  const { data: postData, error, isLoading } = useSWR("/api/qiita", fetcher);
 
   return {
     postData,
