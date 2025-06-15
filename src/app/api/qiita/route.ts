@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs"; // Edge ではなく Node.js で実行
+export const dynamic = "force-dynamic"; // 毎リクエストごとに実行
+
 export async function GET() {
   try {
     // 環境変数の存在チェック
