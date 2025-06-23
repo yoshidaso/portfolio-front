@@ -1,6 +1,6 @@
 "use client";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
-import { Linkedin, Mail } from "lucide-react";
+import { Linkedin, Mail, Moon, Sun } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import {
   Card,
@@ -13,6 +13,7 @@ import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
 import { getPosts, PostData, useOgp } from "./hooks/useQiita";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 type Github = {
   front: string;
@@ -52,9 +53,59 @@ const PROJECTS: Project[] = [
 export default function Home() {
   const { postData, isLoading, error } = getPosts();
   const { allOgpData, isLoading: ogpLoading, error: ogpError } = useOgp();
+  
+  // テーマ状態の管理
+  const [theme, setTheme] = useState<string>("light");
+
+  useEffect(() => {
+    // システムのテーマを確認
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    
+    // ローカルストレージからテーマを取得、なければシステムテーマを使用
+    const savedTheme = localStorage.getItem("theme") || systemTheme;
+    setTheme(savedTheme);
+    
+    // HTMLにクラスを適用
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-background text-foreground">
+      {/* Theme Toggle Button - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={toggleTheme}
+          className="bg-background/80 backdrop-blur-sm border-border"
+        >
+          {theme === "light" ? (
+            <Moon className="h-[1.2rem] w-[1.2rem] transition-all" />
+          ) : (
+            <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
+          )}
+          <span className="sr-only">テーマを切り替え</span>
+        </Button>
+      </div>
+
       {/* Hero Section */}
       <HeroGeometric
         badge="FluenceCode"
@@ -63,7 +114,7 @@ export default function Home() {
       />
 
       {/* About Section */}
-      <section className="py-20 bg-accent/5">
+      <section className="py-20 bg-accent/5 dark:bg-accent/10">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -77,8 +128,8 @@ export default function Home() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-3 text-primary">About Me</h2>
-              <p>Web系のフリーランスエンジニアとして活動しています。</p>
-              <p>
+              <p className="text-foreground mb-2">Web系のフリーランスエンジニアとして活動しています。</p>
+              <p className="text-foreground">
                 現在は少数精鋭のチームでGoやTypeScript（Next.jsなど）を中心に、フロントエンドからバックエンドまで幅広く担当しています。
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -92,7 +143,7 @@ export default function Home() {
                 ].map((skill) => (
                   <div
                     key={skill}
-                    className="bg-white p-3 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow duration-300 border border-primary/10"
+                    className="bg-card dark:bg-card p-3 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow duration-300 border border-primary/10 text-card-foreground"
                   >
                     {skill}
                   </div>
@@ -104,7 +155,7 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section className="py-20">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Featured Projects
@@ -113,20 +164,20 @@ export default function Home() {
             {PROJECTS.map((project, index) => (
               <Card
                 key={index}
-                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card text-card-foreground"
               >
                 <CardHeader>
                   <CardTitle className="text-primary">
                     {project.title}
                   </CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
+                  <CardDescription className="text-muted-foreground">{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="bg-accent/10 text-accent px-2 py-1 rounded-md text-sm"
+                        className="bg-accent/10 text-accent-foreground px-2 py-1 rounded-md text-sm"
                       >
                         {tech}
                       </span>
@@ -138,7 +189,7 @@ export default function Home() {
                         key={key}
                         href={value}
                         target="_blank"
-                        className="flex items-center gap-2 border px-4 rounded-md"
+                        className="flex items-center gap-2 border border-border px-4 py-2 rounded-md hover:bg-accent/50 transition-colors"
                       >
                         <FaGithub size={16} />
                         {key === "front" ? "Front" : "API"}
@@ -147,7 +198,7 @@ export default function Home() {
                     <Link
                       href={project.demo}
                       target="_blank"
-                      className="flex items-center gap-2 border px-4 rounded-md"
+                      className="flex items-center gap-2 border border-border px-4 py-2 rounded-md hover:bg-accent/50 transition-colors"
                     >
                       <FaExternalLinkAlt size={16} />
                       Link
@@ -161,15 +212,15 @@ export default function Home() {
       </section>
 
       {/* Blog Section */}
-      <section className="py-20 bg-accent/5">
+      <section className="py-20 bg-accent/5 dark:bg-accent/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Latest Posts
           </h2>
           {isLoading || ogpLoading ? (
-            <div className="text-center py-8">Loading posts...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading posts...</div>
           ) : error ? (
-            <div className="text-center py-8 text-red-500">
+            <div className="text-center py-8 text-destructive">
               Error loading posts
             </div>
           ) : (
@@ -178,9 +229,9 @@ export default function Home() {
                 <Link href={post.url} key={index} target="_blank">
                   <Card
                     key={index}
-                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card text-card-foreground"
                   >
-                    <div className="w-full h-48 relative overflow-hidden bg-gray-100 rounded-t-lg">
+                    <div className="w-full h-48 relative overflow-hidden bg-muted rounded-t-lg">
                       {allOgpData[index]?.image ? (
                         <Image
                           src={allOgpData[index].image}
@@ -189,7 +240,7 @@ export default function Home() {
                           height={200}
                         />
                       ) : (
-                        <div className="flex items-center justify-center h-full text-gray-400">
+                        <div className="flex items-center justify-center h-full text-muted-foreground">
                           <svg
                             className="w-12 h-12"
                             fill="none"
@@ -223,7 +274,7 @@ export default function Home() {
           <Link
             href="https://qiita.com/FluenceCode"
             target="_blank"
-            className="flex justify-center items-center border px-2 py-1 rounded-md w-fit mx-auto"
+            className="flex justify-center items-center border border-border px-2 py-1 rounded-md w-fit mx-auto hover:bg-accent/50 transition-colors"
           >
             View All Posts
           </Link>
@@ -231,40 +282,40 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4 max-w-2xl">
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Get in Touch
           </h2>
-          <Card className="border-primary/10">
+          <Card className="border-primary/10 bg-card text-card-foreground">
             <CardContent className="pt-6">
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Name</label>
+                    <label className="text-sm font-medium text-foreground">Name</label>
                     <input
                       type="text"
-                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                      className="w-full px-3 py-2 border border-border rounded-md focus:ring-2 focus:ring-ring focus:border-ring bg-background text-foreground"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Email</label>
+                    <label className="text-sm font-medium text-foreground">Email</label>
                     <input
                       type="email"
-                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                      className="w-full px-3 py-2 border border-border rounded-md focus:ring-2 focus:ring-ring focus:border-ring bg-background text-foreground"
                       required
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Message</label>
+                  <label className="text-sm font-medium text-foreground">Message</label>
                   <textarea
-                    className="w-full px-3 py-2 border rounded-md h-32 focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    className="w-full px-3 py-2 border border-border rounded-md h-32 focus:ring-2 focus:ring-ring focus:border-ring bg-background text-foreground"
                     required
                   ></textarea>
                 </div>
-                <Button className="w-full bg-primary hover:bg-primary/90">
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                   Send Message
                 </Button>
               </form>
@@ -274,7 +325,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-accent/5">
+      <footer className="py-12 bg-accent/5 dark:bg-accent/10">
         <div className="container mx-auto px-4 text-center">
           <div className="flex justify-center gap-6 mb-8">
             <a
