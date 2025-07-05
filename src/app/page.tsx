@@ -109,7 +109,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Featured Projects
           </h2>
-          <div className="flex flex-row justify-center items-center gap-16 mx-auto">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-16 mx-auto">
             {PROJECTS.map((project, index) => (
               <Card
                 key={index}
@@ -132,7 +132,7 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 justify-center">
                     {Object.entries(project.github).map(([key, value]) => (
                       <Link
                         key={key}
@@ -173,7 +173,7 @@ export default function Home() {
               Error loading posts
             </div>
           ) : (
-            <div className="flex justify-center items-center gap-16 mx-auto mb-12">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-16 mx-auto mb-12">
               {(postData || []).map((post: PostData, index: number) => (
                 <Link href={post.url} key={index} target="_blank">
                   <Card
