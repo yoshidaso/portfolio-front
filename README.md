@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Sota's portofolio
 
-## Getting Started
+# Portfolio Frontend
 
-First, run the development server:
+## 環境変数の設定
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Vercel での設定
+
+1. Vercel のダッシュボードでプロジェクトを選択
+2. "Settings" > "Environment Variables" に移動
+3. 以下の環境変数を追加：
+   - `QIITA_ACCESS_TOKEN`: Qiita のアクセストークン
+
+### Qiita アクセストークンの取得方法
+
+1. [Qiita](https://qiita.com/)にログイン
+2. 設定ページ（https://qiita.com/settings/applications）に移動
+3. "個人用アクセストークン"セクションで新しいトークンを作成
+4. 必要なスコープを選択（`read_qiita`が必須）
+5. 生成されたトークンをコピー
+
+### ローカル開発
+
+`.env.local`ファイルを作成して以下を追加：
+
+```
+QIITA_ACCESS_TOKEN=your_qiita_access_token_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 本番環境のトラブルシューティング
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 401 エラーの対処法
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Vercel の環境変数に QIITA_ACCESS_TOKEN が正しく設定されているか確認
+2. トークンが有効で、適切なスコープが設定されているか確認
+3. Vercel で再デプロイを実行

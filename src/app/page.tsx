@@ -1,6 +1,6 @@
 "use client";
-
-import { Github, Linkedin, Mail } from "lucide-react";
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { Linkedin, Mail } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import {
   Card,
@@ -11,60 +11,56 @@ import {
 } from "@/app/components/ui/card";
 import { HeroGeometric } from "@/app/components/ui/shape-landing-hero";
 import Image from "next/image";
+import { getPosts, PostData, useOgp } from "./hooks/useQiita";
+import Link from "next/link";
+
+type Github = {
+  front: string;
+  api?: string;
+};
+
+type Project = {
+  title: string;
+  description: string;
+  tech: string[];
+  github: Github;
+  demo: string;
+};
+
+const PROJECTS: Project[] = [
+  {
+    title: "shift-app",
+    description: "シフト管理アプリ",
+    tech: ["Next.js", "TypeScript", "Go", "Prisma", "MySQL"],
+    github: {
+      front: "https://github.com/yoshidaso/shift-app-front",
+      api: "https://github.com/yoshidaso/shift-app-api",
+    },
+    demo: "#",
+  },
+  {
+    title: "Workout App",
+    description: "筋トレ記録アプリ",
+    tech: ["Next.js", "TypeScript", "Go", "Prisma", "MySQL"],
+    github: {
+      front: "https://github.com/yoshidaso/workout-app-front",
+    },
+    demo: "#",
+  },
+];
 
 export default function Home() {
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description:
-        "A full-stack e-commerce solution with real-time inventory management",
-      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "AI Content Generator",
-      description: "An AI-powered platform for generating marketing content",
-      tech: ["React", "Python", "OpenAI", "FastAPI"],
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "Financial Dashboard",
-      description: "Real-time financial data visualization platform",
-      tech: ["Next.js", "D3.js", "TypeScript", "Tailwind"],
-      github: "#",
-      demo: "#",
-    },
-  ];
-
-  const posts = [
-    {
-      title: "Building Scalable Systems with Go",
-      date: "2024-03-20",
-      category: "Backend Development",
-      excerpt:
-        "Learn how to build highly scalable systems using Go and modern architecture patterns.",
-    },
-    {
-      title: "React Performance Optimization",
-      date: "2024-03-15",
-      category: "Frontend Development",
-      excerpt:
-        "Deep dive into React performance optimization techniques and best practices.",
-    },
-    {
-      title: "The Future of Web Development",
-      date: "2024-03-10",
-      category: "Web Development",
-      excerpt: "Exploring upcoming trends and technologies in web development.",
-    },
-  ];
+  const { postData, isLoading, error } = getPosts();
+  const { allOgpData, isLoading: ogpLoading, error: ogpError } = useOgp();
 
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <HeroGeometric badge="Sota Yoshida" title1="Full Stack" title2="Developer" />
+      <HeroGeometric
+        badge="FluenceCode"
+        title1="Full Stack"
+        title2="Developer"
+      />
 
       {/* About Section */}
       <section className="py-20 bg-accent/5">
@@ -80,13 +76,12 @@ export default function Home() {
               />
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6 text-primary">About Me</h2>
-              <p className="text-lg mb-6">
-                I&apos;m a passionate full-stack developer with over 5 years of
-                experience in building modern web applications. I specialize in
-                React, Node.js, and cloud technologies.
+              <h2 className="text-3xl font-bold mb-3 text-primary">About Me</h2>
+              <p>Web系のフリーランスエンジニアとして活動しています。</p>
+              <p>
+                現在は少数精鋭のチームでGoやTypeScript（Next.jsなど）を中心に、フロントエンドからバックエンドまで幅広く担当しています。
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                 {[
                   "TypeScript",
                   "Golang",
@@ -114,11 +109,11 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Featured Projects
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
+          <div className="flex flex-col md:flex-row justify-center items-center gap-16 mx-auto">
+            {PROJECTS.map((project, index) => (
               <Card
                 key={index}
-                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-primary/10"
+                className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <CardHeader>
                   <CardTitle className="text-primary">
@@ -137,21 +132,26 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-4 flex-wrap">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-primary text-primary hover:bg-primary/10"
+                  <div className="flex gap-4 justify-center">
+                    {Object.entries(project.github).map(([key, value]) => (
+                      <Link
+                        key={key}
+                        href={value}
+                        target="_blank"
+                        className="flex items-center gap-2 border px-4 rounded-md"
+                      >
+                        <FaGithub size={16} />
+                        {key === "front" ? "Front" : "API"}
+                      </Link>
+                    ))}
+                    <Link
+                      href={project.demo}
+                      target="_blank"
+                      className="flex items-center gap-2 border px-4 rounded-md"
                     >
-                      <Github className="mr-2 h-4 w-4" />
-                      GitHub
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-primary hover:bg-primary/90"
-                    >
-                      Live Demo
-                    </Button>
+                      <FaExternalLinkAlt size={16} />
+                      Link
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -166,32 +166,67 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-12 text-center text-primary">
             Latest Posts
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {posts.map((post, index) => (
-              <Card
-                key={index}
-                className="hover:shadow-xl transition-shadow duration-300 border-primary/10"
-              >
-                <CardHeader>
-                  <div className="text-sm text-muted-foreground mb-2">
-                    {post.category} • {post.date}
-                  </div>
-                  <CardTitle className="text-xl text-primary">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription>{post.excerpt}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center">
-            <Button
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              View All Posts
-            </Button>
-          </div>
+          {isLoading || ogpLoading ? (
+            <div className="text-center py-8">Loading posts...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">
+              Error loading posts
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row justify-center items-center gap-16 mx-auto mb-12">
+              {(postData || []).map((post: PostData, index: number) => (
+                <Link href={post.url} key={index} target="_blank">
+                  <Card
+                    key={index}
+                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  >
+                    <div className="w-full h-48 relative overflow-hidden bg-gray-100 rounded-t-lg">
+                      {allOgpData[index]?.image ? (
+                        <Image
+                          src={allOgpData[index].image}
+                          alt={post.title}
+                          width={400}
+                          height={200}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400">
+                          <svg
+                            className="w-12 h-12"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          <CardTitle className="text-xl text-primary">
+                            {post.title}
+                          </CardTitle>
+                        </div>
+                      )}
+                    </div>
+                    <CardHeader className="flex-grow">
+                      <div className="text-sm text-muted-foreground">
+                        {post.created_at.split("T")[0]}
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
+          <Link
+            href="https://qiita.com/FluenceCode"
+            target="_blank"
+            className="flex justify-center items-center border px-2 py-1 rounded-md w-fit mx-auto"
+          >
+            View All Posts
+          </Link>
         </div>
       </section>
 
@@ -243,10 +278,10 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <div className="flex justify-center gap-6 mb-8">
             <a
-              href="#"
+              href="https://github.com/yoshidaso"
               className="text-primary hover:text-primary/80 transition-colors"
             >
-              <Github size={24} />
+              <FaGithub size={24} />
             </a>
             <a
               href="#"
@@ -262,7 +297,7 @@ export default function Home() {
             </a>
           </div>
           <p className="text-muted-foreground">
-            © {new Date().getFullYear()} John Doe. All rights reserved.
+            © {new Date().getFullYear()} FluenceCode. All rights reserved.
           </p>
         </div>
       </footer>
