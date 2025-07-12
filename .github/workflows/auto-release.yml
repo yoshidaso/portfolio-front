@@ -1,0 +1,67 @@
+name: Auto Release PR from develop to main
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+jobs:
+  gitPrRelease:
+    name: Create Release PR
+    runs-on: ubuntu-latest
+    # PRがマージされた場合のみ実行
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Build project
+        run: yarn build
+
+      - name: Create Release PR
+        uses: bakunyo/git-pr-release-action@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_PR_RELEASE_BRANCH_PRODUCTION: main
+          GIT_PR_RELEASE_BRANCH_STAGING: develop
+          GIT_PR_RELEASE_TEMPLATE: .git-pr-release-template
+          GIT_PR_RELEASE_LABELS: pr-release,auto-release
+          GIT_PR_RELEASE_ASSIGNEE: ${{ github.actor }}
+
+      - name: Comment on original PR
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Release PR has been created successfully!'
+            })
+
+      - name: Handle failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Failed to create release PR. Please check the workflow logs.'
+            })
