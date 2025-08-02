@@ -30,7 +30,7 @@ const PROJECTS: Project[] = [
       front: "https://github.com/yoshidaso/shift-app-front",
       api: "https://github.com/yoshidaso/shift-app-api",
     },
-    demo: "#",
+    demo: "https://shift-app-front.vercel.app/",
   },
   {
     title: "Workout App",
