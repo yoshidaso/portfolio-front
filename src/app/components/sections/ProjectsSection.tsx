@@ -39,7 +39,7 @@ const PROJECTS: Project[] = [
     github: {
       front: "https://github.com/yoshidaso/workout-app-front",
     },
-    demo: "#",
+    demo: "https://workout-app-front-sotas-projects.vercel.app/",
   },
 ];
 
